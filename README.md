@@ -37,7 +37,7 @@ sampctl package install Mergevos/samp-walking-styles
 Include in your code and begin using the library:
 
 ```pawn
-#include <samp-walking-styles>
+#include <walking-styles>
 ```
 
 ## Usage
