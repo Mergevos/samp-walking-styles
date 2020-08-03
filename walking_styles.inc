@@ -20,6 +20,22 @@
 		((newkeys & (%0)) == (%0))
 #endif
 
+
+// --
+// Credits
+// --
+
+#if !defined WALKING_STYLES_NO_CREDITS_MSG
+	public OnGameModeInit() {
+		#if defined WS_OnGameModeInit
+			WS_OnGameModeInit();
+		#endif
+		print("[1.0.0] Walking styles loaded \n\
+			Created by Ben Jackster | Forked by Mergevos");
+		return 1;
+	}
+#endif
+
 // --
 // Walking styles
 // --
@@ -314,4 +330,18 @@ stock GetPlayerWalkingStyle(const playerid) {
 #define OnPlayerConnect WS_OnPlayerConnect
 #if defined WS_OnPlayerConnect
     forward WS_OnPlayerConnect(playerid);
+#endif
+
+// --
+// ALS OnGameModeInit
+// --
+
+#if defined _ALS_OnGameModeInit
+    #undef OnGameModeInit
+#else
+    #define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit WS_OnGameModeInit
+#if defined WS_OnGameModeInit
+    forward WS_OnGameModeInit();
 #endif
