@@ -42,12 +42,39 @@ Include in your code and begin using the library:
 
 ## Usage
 
-<!--
-Write your code documentation or examples here. If your library is documented in
-the source code, direct users there. If not, list your API and describe it well
-in this section. If your library is passive and has no API, simply omit this
-section.
--->
+If you've had included this into your script/gamemode etc... Start by using a simple function  
+```  
+SetPlayerWalkingStyle(const playerid, const style);
+```
+This is going to set you some of walking styles below 
+```
+enum {
+	WALKING_STYLE_DEFAULT = 0,
+	WALKING_STYLE_NORMAL,
+	WALKING_STYLE_PED,
+	WALKING_STYLE_GANGSTA,
+	WALKING_STYLE_GANGSTA2,
+	WALKING_STYLE_OLD,
+	WALKING_STYLE_FAT_OLD,
+	WALKING_STYLE_FAT,
+	WALKING_STYLE_WOMANOLD,
+	WALKING_STYLE_WOMANFATOLD,
+	WALKING_STYLE_SHUFFLE,
+	WALKING_STYLE_LADY,
+	WALKING_STYLE_LADY2,
+	WALKING_STYLE_WHORE,
+	WALKING_STYLE_WHORE2,
+	WALKING_STYLE_DRUNK,
+	WALKING_STYLE_BLIND
+};
+```
+And there is 
+```
+GetPlayerWalkingStyle(const playerid);
+```
+This will return you the player's walking style.
+
+*Note*: If you've set the player's walking style, to activate it, firstly press _W_ then _left alt_ key.
 
 ## Testing
 
