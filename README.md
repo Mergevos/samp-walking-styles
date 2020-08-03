@@ -1,6 +1,6 @@
 # samp-walking-styles
 
-[![sampctl](https://img.shields.io/badge/sampctl-samp--walking--styles-2f2f2f.svg?style=for-the-badge)](https://github.com/Mergevos/samp-walking-styles)
+[![sampctl](https://img.shields.io/badge/mergevos-samp--walking--styles-2f2f2f.svg?style=for-the-badge)](https://github.com/Mergevos/samp-walking-styles)
 
 <!--
 Short description of your library, why it's useful, some examples, pictures or
