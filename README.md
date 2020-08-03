@@ -43,11 +43,11 @@ Include in your code and begin using the library:
 ## Usage
 
 If you've had included this into your script/gamemode etc... Start by using a simple function  
-```  
+```pawn
 SetPlayerWalkingStyle(const playerid, const style);
 ```
 This is going to set you some of walking styles below 
-```
+```pawn
 enum {
 	WALKING_STYLE_DEFAULT = 0,
 	WALKING_STYLE_NORMAL,
@@ -69,7 +69,7 @@ enum {
 };
 ```
 And there is 
-```
+```pawn
 GetPlayerWalkingStyle(const playerid);
 ```
 This will return you the player's walking style.
@@ -83,7 +83,7 @@ Depending on whether your package is tested via in-game "demo tests" or
 y_testing unit-tests, you should indicate to readers what to expect below here.
 -->
 
-To test, simply run the package:
+To test, firstly configure pawn.json then simply run the package:
 
 ```bash
 sampctl package run
