@@ -1,2 +1,10 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Declare files that will always have CRLF line endings on checkout.
+*.pwn text eol=crlf
+*.inc text eol=crlf
+
+
 *.pwn linguist-language=Pawn
 *.inc linguist-language=Pawn
