@@ -1,4 +1,4 @@
-/**  
+/** 
     @ Author: Ben Jackster
     @ Date: 23th June
     @ Git: github.com/Mergevos/samp-walking-styles
