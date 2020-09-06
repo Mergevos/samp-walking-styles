@@ -59,7 +59,7 @@ enum {
 	WALKING_STYLE_DRUNK,
 	WALKING_STYLE_BLIND
 };
- 
+
 // --
 // Vars
 // --
