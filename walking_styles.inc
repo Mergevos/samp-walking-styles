@@ -1,19 +1,19 @@
 /** 
-    @ Author: Ben Jackster
-    @ Date: 23th June
-    @ Git: github.com/Mergevos/samp-walking-styles
-    @ Copyright (C) 2020
-    @ About:
-    	- This include gives you access to 15 walking styles
-    @ Credits: 
-        Me - Forking this and transforming into include
+	@ Author: Ben Jackster
+	@ Date: 23th June
+	@ Git: github.com/Mergevos/samp-walking-styles
+	@ Copyright (C) 2020
+	@ About:
+		- This include gives you access to 15 walking styles
+	@ Credits: 
+		Me - Forking this and transforming into include
 **/
 
 #if defined _walking_Styles_inc
-    #endinput
+	#endinput
 #endif
 
-#include 				< a_samp >
+#include <a_samp>
 
 #if !defined HOLDING 
 	#define HOLDING(%0) \
@@ -75,8 +75,8 @@ static
 public OnPlayerConnect(playerid) {
 
 	#if defined WS_OnPlayerConnect
-        WS_OnPlayerConnect(playerid);
-    #endif
+	WS_OnPlayerConnect(playerid);
+	#endif
 	style_Walking[playerid] = WALKING_STYLE_DEFAULT;
 	KillTimer(timer_Walking[playerid]);
 	return 1;
@@ -89,9 +89,9 @@ public OnPlayerConnect(playerid) {
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	#if defined WS_OnPlayerKeyStateChange
-        WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
-    #endif
-    if(HOLDING(KEY_WALK) && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+		WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+	#endif
+	if(HOLDING(KEY_WALK) && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
 		timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
 	}
 	return 1;
@@ -309,13 +309,13 @@ stock GetPlayerWalkingStyle(const playerid) {
 // --
 
 #if defined _ALS_OnPlayerKeyStateChange
-    #undef OnPlayerKeyStateChange
+	#undef OnPlayerKeyStateChange
 #else
-    #define _ALS_OnPlayerKeyStateChange
+	#define _ALS_OnPlayerKeyStateChange
 #endif
 #define OnPlayerKeyStateChange WS_OnPlayerKeyStateChange
 #if defined WS_OnPlayerKeyStateChange
-    forward WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+	forward WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 #endif
 
 // --
@@ -323,13 +323,13 @@ stock GetPlayerWalkingStyle(const playerid) {
 // --
 
 #if defined _ALS_OnPlayerConnect
-    #undef OnPlayerConnect
+	#undef OnPlayerConnect
 #else
-    #define _ALS_OnPlayerConnect
+	#define _ALS_OnPlayerConnect
 #endif
 #define OnPlayerConnect WS_OnPlayerConnect
 #if defined WS_OnPlayerConnect
-    forward WS_OnPlayerConnect(playerid);
+	forward WS_OnPlayerConnect(playerid);
 #endif
 
 // --
@@ -337,11 +337,11 @@ stock GetPlayerWalkingStyle(const playerid) {
 // --
 
 #if defined _ALS_OnGameModeInit
-    #undef OnGameModeInit
+	#undef OnGameModeInit
 #else
-    #define _ALS_OnGameModeInit
+	#define _ALS_OnGameModeInit
 #endif
 #define OnGameModeInit WS_OnGameModeInit
 #if defined WS_OnGameModeInit
-    forward WS_OnGameModeInit();
+	forward WS_OnGameModeInit();
 #endif
