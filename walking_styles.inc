@@ -108,8 +108,18 @@ public OnPlayerConnect(playerid) {
 	return 1;
 }
 // --
-// OnPlayerKeyStateChange
+// OnPlayerDisconnect
 // --
+public OnPlayerDisconnect(playerid) {
+
+	#if defined WS_OnPlayerDisconnect
+        WS_OnPlayerDisconnect(playerid);
+    #endif
+    if(timer_Walking[playerid] != -1)
+        KillTimer(timer_Walking[playerid]);
+	return 1;
+}
+
 public OnPlayerUpdate(playerid)
 {
     if(GetPlayerWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
@@ -178,7 +188,7 @@ public timer_WalkAnimation(playerid)
             }
         }
     }
-    return ApplyAnimation(playerid,"PED",IndexesAnimation[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
+	return ApplyAnimation(playerid,"PED",IndexesAnimation[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
 }
 
 // --
@@ -209,6 +219,21 @@ stock GetPlayerWalkingStyle(const playerid) {
 #define OnPlayerConnect WS_OnPlayerConnect
 #if defined WS_OnPlayerConnect
     forward WS_OnPlayerConnect(playerid);
+#endif
+
+
+// --
+// ALS OnPlayerDisonnect
+// --
+
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect WS_OnPlayerDisconnect
+#if defined WS_OnPlayerDisconnect
+    forward WS_OnPlayerDisconnect(playerid);
 #endif
 
 // --
