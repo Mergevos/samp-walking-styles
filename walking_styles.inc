@@ -30,8 +30,8 @@
 		#if defined WS_OnGameModeInit
 			WS_OnGameModeInit();
 		#endif
-		print("[1.0.0] Walking styles loaded \n\
-			Created by Ben Jackster | Forked by Mergevos");
+		print("[2.0.0] Walking styles loaded \n\
+			Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard");
 		return 1;
 	}
 #endif
@@ -39,6 +39,10 @@
 // --
 // Walking styles
 // --
+
+
+#define TIME_UPDATE_ANIMATION   (200)
+
 
 enum {
 	WALKING_STYLE_DEFAULT = 0,
@@ -68,6 +72,28 @@ static
 	timer_Walking[MAX_PLAYERS], 
 	style_Walking[MAX_PLAYERS];
 
+static const indexes_animations[] = {1231,1224,1226,1276,1278,1280,1228,1230,1458};
+//indexes animations for checking walking
+
+static const NameAnimations[][] =
+{
+    "WALK_player",
+    "WALK_civi",
+    "WALK_gang1",
+    "WALK_gang2",
+    "WALK_old",
+    "WALK_fatold",
+    "WALK_fat",
+    "WOMAN_walkold",
+    "WOMAN_walkfatold",
+    "WALK_shuffle",
+    "WOMAN_walknorm",
+    "WOMAN_walkbusy",
+    "WOMAN_walkpro",
+    "WOMAN_walksexy",
+    "WALK_drunk",
+    "WALK_Wuzi"
+};
 // --
 // OnPlayerConnect
 // --
@@ -78,214 +104,87 @@ public OnPlayerConnect(playerid) {
         WS_OnPlayerConnect(playerid);
     #endif
 	style_Walking[playerid] = WALKING_STYLE_DEFAULT;
-	KillTimer(timer_Walking[playerid]);
+    timer_Walking[playerid] = -1;
 	return 1;
 }
-
 // --
-// OnPlayerKeyStateChange
+// OnPlayerDisconnect
 // --
+public OnPlayerDisconnect(playerid, reason) {
 
-public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	#if defined WS_OnPlayerKeyStateChange
-        WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+	#if defined WS_OnPlayerDisconnect
+        WS_OnPlayerDisconnect(playerid, reason);
     #endif
-    if(HOLDING(KEY_WALK) && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-		timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-	}
+    if(timer_Walking[playerid] != -1)
+        KillTimer(timer_Walking[playerid]);
 	return 1;
 }
+
+public OnPlayerUpdate(playerid)
+{
+    if(GetPlayerWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
+    {
+        new keys, updown, leftright;
+        GetPlayerKeys(playerid,keys,updown,leftright);
+        if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
+        {
+            new temp_index_anim = GetPlayerAnimationIndex(playerid);
+            for(new i = 0; i < sizeof indexes_animations; i++)
+            {
+                if(temp_index_anim == indexes_animations[i])
+                {   
+                    ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.1,1,1,1,1,1);
+                    timer_WalkAnimation(playerid);
+                    break;
+                }
+            }
+        }        
+    }
+    #if defined gf_OnPlayerUpdate
+        return gf_OnPlayerUpdate(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerUpdate
+    #undef OnPlayerUpdate
+#else
+    #define _ALS_OnPlayerUpdate
+#endif
+
+#define OnPlayerUpdate gf_OnPlayerUpdate
+#if defined gf_OnPlayerUpdate
+    forward gf_OnPlayerUpdate(playerid);
+#endif
+
 
 // --
 // <summary> Handles timer_WalkAnimation timer</summary>
 // --
 
+
+
 forward timer_WalkAnimation(playerid);
 public timer_WalkAnimation(playerid)
 {
-	new keys, updown, leftright;
-	GetPlayerKeys(playerid,keys,updown,leftright);
-	switch(style_Walking[playerid]) {
-	
-		case WALKING_STYLE_NORMAL: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_player",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_player",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_PED: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_civi",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_civi",4.0,0,0,0,0,1);
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_GANGSTA: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_gang1",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_gang1",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_GANGSTA2: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_gang2",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_gang2",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_OLD: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_old",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_old",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_FAT_OLD: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_fatold",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_fatold",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_FAT: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_fat",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_fat",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}	
-		case WALKING_STYLE_WOMANOLD: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walkold",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walkold",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_WOMANFATOLD: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walkfatold",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walkfatold",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_SHUFFLE: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_shuffle",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_shuffle",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_LADY: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walknorm",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walknorm",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_LADY2: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walkbusy",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walkbusy",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_WHORE: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walkpro",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walkpro",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_WHORE2: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WOMAN_walksexy",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WOMAN_walksexy",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_DRUNK: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_drunk",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_drunk",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-		case WALKING_STYLE_BLIND: {
-			if ((keys & KEY_WALK && updown & KEY_UP) || (keys & KEY_WALK && updown & KEY_DOWN) || (keys & KEY_WALK && leftright & KEY_LEFT) || (keys & KEY_WALK && leftright & KEY_RIGHT)) {
-				KillTimer(timer_Walking[playerid]);
-				ApplyAnimation(playerid,"PED","WALK_Wuzi",4.1,1,1,1,1,1);
-				timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",200,0,"d",playerid);
-			}
-			else {
-				ApplyAnimation(playerid,"PED","WALK_Wuzi",4.0,0,0,0,0,1); 
-				KillTimer(timer_Walking[playerid]);
-			}
-		}
-	}
-	return 1;
+    timer_Walking[playerid] = -1;
+    if(style_Walking[playerid] <= 0) 
+        return false;
+    new keys, updown, leftright;
+    GetPlayerKeys(playerid,keys,updown,leftright);
+    if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
+    {
+        new temp_index_anim = GetPlayerAnimationIndex(playerid);
+        for(new i = 0; i < sizeof indexes_animations; i++)
+        {
+            if(temp_index_anim == indexes_animations[i])
+            {   
+                timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
+                return true;
+            }
+        }
+    }
+	return ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
 }
 
 // --
@@ -293,7 +192,10 @@ public timer_WalkAnimation(playerid)
 // --
 
 stock SetPlayerWalkingStyle(const playerid, const style) {
+    if(style >= sizeof(NameAnimations))
+        return false;
 	style_Walking[playerid] = style;
+    return true;
 }
 
 // --
@@ -303,20 +205,6 @@ stock SetPlayerWalkingStyle(const playerid, const style) {
 stock GetPlayerWalkingStyle(const playerid) {
 	return style_Walking[playerid];
 }
-
-// --
-// ALS OnPlayerKeyStateChange
-// --
-
-#if defined _ALS_OnPlayerKeyStateChange
-    #undef OnPlayerKeyStateChange
-#else
-    #define _ALS_OnPlayerKeyStateChange
-#endif
-#define OnPlayerKeyStateChange WS_OnPlayerKeyStateChange
-#if defined WS_OnPlayerKeyStateChange
-    forward WS_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
-#endif
 
 // --
 // ALS OnPlayerConnect
@@ -330,6 +218,21 @@ stock GetPlayerWalkingStyle(const playerid) {
 #define OnPlayerConnect WS_OnPlayerConnect
 #if defined WS_OnPlayerConnect
     forward WS_OnPlayerConnect(playerid);
+#endif
+
+
+// --
+// ALS OnPlayerDisonnect
+// --
+
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect WS_OnPlayerDisconnect
+#if defined WS_OnPlayerDisconnect
+    forward WS_OnPlayerDisconnect(playerid, reason);
 #endif
 
 // --
