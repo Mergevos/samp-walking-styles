@@ -110,10 +110,10 @@ public OnPlayerConnect(playerid) {
 // --
 // OnPlayerDisconnect
 // --
-public OnPlayerDisconnect(playerid) {
+public OnPlayerDisconnect(playerid, reason) {
 
 	#if defined WS_OnPlayerDisconnect
-        WS_OnPlayerDisconnect(playerid);
+        WS_OnPlayerDisconnect(playerid, reason);
     #endif
     if(timer_Walking[playerid] != -1)
         KillTimer(timer_Walking[playerid]);
@@ -199,6 +199,7 @@ stock SetPlayerWalkingStyle(const playerid, const style) {
     if(style >= sizeof(NameAnimations))
         return false;
 	style_Walking[playerid] = style;
+    return true;
 }
 
 // --
@@ -235,7 +236,7 @@ stock GetPlayerWalkingStyle(const playerid) {
 #endif
 #define OnPlayerDisconnect WS_OnPlayerDisconnect
 #if defined WS_OnPlayerDisconnect
-    forward WS_OnPlayerDisconnect(playerid);
+    forward WS_OnPlayerDisconnect(playerid, reason);
 #endif
 
 // --
