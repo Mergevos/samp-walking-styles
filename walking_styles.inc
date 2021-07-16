@@ -133,6 +133,7 @@ public OnPlayerUpdate(playerid)
             {
                 if(temp_index_anim == indexes_animations[i])
                 {   
+                    ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.1,1,1,1,1,1);
                     timer_WalkAnimation(playerid);
                     break;
                 }
@@ -167,24 +168,20 @@ forward timer_WalkAnimation(playerid);
 public timer_WalkAnimation(playerid)
 {
     timer_Walking[playerid] = -1;
+    if(style_Walking[playerid] <= 0) 
+        return false;
     new keys, updown, leftright;
     GetPlayerKeys(playerid,keys,updown,leftright);
-    switch(style_Walking[playerid]) 
+    if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
     {
-        case WALKING_STYLE_NORMAL..WALKING_STYLE_BLIND: 
+        new temp_index_anim = GetPlayerAnimationIndex(playerid);
+        for(new i = 0; i < sizeof indexes_animations; i++)
         {
-            if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
-            {
-                new temp_index_anim = GetPlayerAnimationIndex(playerid);
-                for(new i = 0; i < sizeof indexes_animations; i++)
-                {
-                    if(temp_index_anim == indexes_animations[i])
-                    {   
-                        ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.1,1,1,1,1,1);
-                        timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
-                        return true;
-                    }
-                }
+            if(temp_index_anim == indexes_animations[i])
+            {   
+                
+                timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
+                return true;
             }
         }
     }
