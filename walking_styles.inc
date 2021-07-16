@@ -30,8 +30,8 @@
 		#if defined WS_OnGameModeInit
 			WS_OnGameModeInit();
 		#endif
-		print("[1.0.0] Walking styles loaded \n\
-			Created by Ben Jackster | Forked by Mergevos");
+		print("[2.0.0] Walking styles loaded \n\
+			Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard");
 		return 1;
 	}
 #endif
@@ -179,7 +179,6 @@ public timer_WalkAnimation(playerid)
         {
             if(temp_index_anim == indexes_animations[i])
             {   
-                
                 timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
                 return true;
             }
