@@ -75,7 +75,7 @@ static
 static const indexes_animations[] = {1231,1224,1226,1276,1278,1280,1228,1230,1458};
 //indexes animations for checking walking
 
-static const IndexesAnimation[][] =
+static const NameAnimations[][] =
 {
     "WALK_player",
     "WALK_civi",
@@ -180,7 +180,7 @@ public timer_WalkAnimation(playerid)
                 {
                     if(temp_index_anim == indexes_animations[i])
                     {   
-                        ApplyAnimation(playerid,"PED",IndexesAnimation[style_Walking[playerid]-1],4.1,1,1,1,1,1);
+                        ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.1,1,1,1,1,1);
                         timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
                         return true;
                     }
@@ -188,7 +188,7 @@ public timer_WalkAnimation(playerid)
             }
         }
     }
-	return ApplyAnimation(playerid,"PED",IndexesAnimation[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
+	return ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
 }
 
 // --
@@ -196,6 +196,8 @@ public timer_WalkAnimation(playerid)
 // --
 
 stock SetPlayerWalkingStyle(const playerid, const style) {
+    if(style >= sizeof(NameAnimations))
+        return false;
 	style_Walking[playerid] = style;
 }
 
