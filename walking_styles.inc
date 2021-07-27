@@ -26,7 +26,8 @@
 // --
 
 #if !defined WALKING_STYLES_NO_CREDITS_MSG
-	public OnGameModeInit() {
+	public OnGameModeInit() 
+    {
 		#if defined WS_OnGameModeInit
 			WS_OnGameModeInit();
 		#endif
@@ -44,7 +45,8 @@
 #define TIME_UPDATE_ANIMATION   (200)
 
 
-enum {
+enum 
+{
 	WALKING_STYLE_DEFAULT = 0,
 	WALKING_STYLE_NORMAL,
 	WALKING_STYLE_PED,
@@ -98,7 +100,8 @@ static const NameAnimations[][] =
 // OnPlayerConnect
 // --
 
-public OnPlayerConnect(playerid) {
+public OnPlayerConnect(playerid) 
+{
 
 	#if defined WS_OnPlayerConnect
         WS_OnPlayerConnect(playerid);
@@ -110,7 +113,8 @@ public OnPlayerConnect(playerid) {
 // --
 // OnPlayerDisconnect
 // --
-public OnPlayerDisconnect(playerid, reason) {
+public OnPlayerDisconnect(playerid, reason) 
+{
 
 	#if defined WS_OnPlayerDisconnect
         WS_OnPlayerDisconnect(playerid, reason);
@@ -122,7 +126,7 @@ public OnPlayerDisconnect(playerid, reason) {
 
 public OnPlayerUpdate(playerid)
 {
-    if(GetPlayerWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
+    if(Player_GetWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
     {
         new keys, updown, leftright;
         GetPlayerKeys(playerid,keys,updown,leftright);
@@ -190,8 +194,14 @@ public timer_WalkAnimation(playerid)
 // --
 // <summary> Sets player's walking style </summary>
 // --
+#pragma deprecated Use Player_SetWalkingStyle instead.
+stock SetPlayerWalkingStyle(const playerid, const style)
+{
+    return Player_SetWalkingStyle(playerid, style);
+}
 
-stock SetPlayerWalkingStyle(const playerid, const style) {
+stock Player_SetWalkingStyle(const playerid, const style) 
+{
     if(style >= sizeof(NameAnimations))
         return false;
 	style_Walking[playerid] = style;
@@ -202,7 +212,14 @@ stock SetPlayerWalkingStyle(const playerid, const style) {
 // <summary> Gets player's walking style </summary>
 // --
 
-stock GetPlayerWalkingStyle(const playerid) {
+
+#pragma deprecated Use Player_GetWalkingStyle instead.
+stock GetPlayerWalkingStyle(const playerid);
+{
+    return Player_SetWalkingStyle(playerid, style);
+}
+stock Player_GetWalkingStyle(const playerid) 
+{
 	return style_Walking[playerid];
 }
 
