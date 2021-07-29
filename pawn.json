@@ -5,5 +5,8 @@
 	"output": "test.amx",
 	"dependencies": [
 		"sampctl/samp-stdlib"
+	],
+	"contributors": [
+		"MaximWizard"
 	]
 }

@@ -44,7 +44,7 @@ Include in your code and begin using the library:
 
 If you've had included this into your script/gamemode etc... Start by using a simple function  
 ```pawn
-SetPlayerWalkingStyle(const playerid, const style);
+Player_SetWalkingStyle(const playerid, const style);
 ```
 This is going to set you some of walking styles below 
 ```pawn
@@ -70,7 +70,7 @@ enum {
 ```
 And there is 
 ```pawn
-GetPlayerWalkingStyle(const playerid);
+Player_GetWalkingStyle(const playerid);
 ```
 This will return you the player's walking style.
 

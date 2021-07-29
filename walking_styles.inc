@@ -1,12 +1,13 @@
 /** 
-    @ Author: Ben Jackster
-    @ Date: 23th June
+    @ Author: Mergevos
+    @ Date: 29th July
     @ Git: github.com/Mergevos/samp-walking-styles
-    @ Copyright (C) 2020
+    @ Copyright (C) 2021
     @ About:
     	- This include gives you access to 15 walking styles
     @ Credits: 
         Me - Forking this and transforming into include
+        MaximWizard - Fixing and rewritting this system
 **/
 
 #if defined _walking_Styles_inc
@@ -15,12 +16,6 @@
 
 #include 				< a_samp >
 
-#if !defined HOLDING 
-	#define HOLDING(%0) \
-		((newkeys & (%0)) == (%0))
-#endif
-
-
 // --
 // Credits
 // --
@@ -28,10 +23,10 @@
 #if !defined WALKING_STYLES_NO_CREDITS_MSG
 	public OnGameModeInit() 
     {
-		#if defined WS_OnGameModeInit
-			WS_OnGameModeInit();
+		#if defined WStyle_OnGameModeInit
+			WStyle_OnGameModeInit();
 		#endif
-		print("[2.0.0] Walking styles loaded \n\
+		print("[2.0.1] Walking styles loaded \n\
 			Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard");
 		return 1;
 	}
@@ -42,7 +37,7 @@
 // --
 
 
-#define TIME_UPDATE_ANIMATION   (200)
+static const TIME_UPDATE_ANIMATION = 300;
 
 
 enum 
@@ -103,8 +98,8 @@ static const NameAnimations[][] =
 public OnPlayerConnect(playerid) 
 {
 
-	#if defined WS_OnPlayerConnect
-        WS_OnPlayerConnect(playerid);
+	#if defined WStyle_OnPlayerConnect
+        WStyle_OnPlayerConnect(playerid);
     #endif
 	style_Walking[playerid] = WALKING_STYLE_DEFAULT;
     timer_Walking[playerid] = -1;
@@ -116,9 +111,6 @@ public OnPlayerConnect(playerid)
 public OnPlayerDisconnect(playerid, reason) 
 {
 
-	#if defined WS_OnPlayerDisconnect
-        WS_OnPlayerDisconnect(playerid, reason);
-    #endif
     if(timer_Walking[playerid] != -1)
         KillTimer(timer_Walking[playerid]);
 	return 1;
@@ -126,6 +118,10 @@ public OnPlayerDisconnect(playerid, reason)
 
 public OnPlayerUpdate(playerid)
 {
+    
+	#if defined WStyle_OnPlayerUpdate
+        WStyle_OnPlayerUpdate(playerid);
+    #endif
     if(Player_GetWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
     {
         new keys, updown, leftright;
@@ -144,23 +140,8 @@ public OnPlayerUpdate(playerid)
             }
         }        
     }
-    #if defined gf_OnPlayerUpdate
-        return gf_OnPlayerUpdate(playerid);
-    #else
-        return 1;
-    #endif
+    return 1;
 }
-#if defined _ALS_OnPlayerUpdate
-    #undef OnPlayerUpdate
-#else
-    #define _ALS_OnPlayerUpdate
-#endif
-
-#define OnPlayerUpdate gf_OnPlayerUpdate
-#if defined gf_OnPlayerUpdate
-    forward gf_OnPlayerUpdate(playerid);
-#endif
-
 
 // --
 // <summary> Handles timer_WalkAnimation timer</summary>
@@ -214,10 +195,11 @@ stock Player_SetWalkingStyle(const playerid, const style)
 
 
 #pragma deprecated Use Player_GetWalkingStyle instead.
-stock GetPlayerWalkingStyle(const playerid);
+stock GetPlayerWalkingStyle(const playerid)
 {
-    return Player_SetWalkingStyle(playerid, style);
+    return Player_GetWalkingStyle(playerid);
 }
+
 stock Player_GetWalkingStyle(const playerid) 
 {
 	return style_Walking[playerid];
@@ -232,9 +214,21 @@ stock Player_GetWalkingStyle(const playerid)
 #else
     #define _ALS_OnPlayerConnect
 #endif
-#define OnPlayerConnect WS_OnPlayerConnect
-#if defined WS_OnPlayerConnect
-    forward WS_OnPlayerConnect(playerid);
+#define OnPlayerConnect WStyle_OnPlayerConnect
+#if defined WStyle_OnPlayerConnect
+    forward WStyle_OnPlayerConnect(playerid);
+#endif
+
+
+#if defined _ALS_OnPlayerUpdate
+    #undef OnPlayerUpdate
+#else
+    #define _ALS_OnPlayerUpdate
+#endif
+
+#define OnPlayerUpdate WStyle_OnPlayerUpdate
+#if defined WStyle_OnPlayerUpdate
+    forward WStyle_OnPlayerUpdate(playerid);
 #endif
 
 
@@ -247,9 +241,9 @@ stock Player_GetWalkingStyle(const playerid)
 #else
     #define _ALS_OnPlayerDisconnect
 #endif
-#define OnPlayerDisconnect WS_OnPlayerDisconnect
-#if defined WS_OnPlayerDisconnect
-    forward WS_OnPlayerDisconnect(playerid, reason);
+#define OnPlayerDisconnect WStyle_OnPlayerDisconnect
+#if defined WStyle_OnPlayerDisconnect
+    forward WStyle_OnPlayerDisconnect(playerid, reason);
 #endif
 
 // --
@@ -261,7 +255,7 @@ stock Player_GetWalkingStyle(const playerid)
 #else
     #define _ALS_OnGameModeInit
 #endif
-#define OnGameModeInit WS_OnGameModeInit
-#if defined WS_OnGameModeInit
-    forward WS_OnGameModeInit();
+#define OnGameModeInit WStyle_OnGameModeInit
+#if defined WStyle_OnGameModeInit
+    forward WStyle_OnGameModeInit();
 #endif
