@@ -14,7 +14,7 @@
     #endinput
 #endif
 
-#include 				< a_samp >
+#include <a_samp>
 
 // --
 // Credits
@@ -26,7 +26,7 @@
 		#if defined WStyle_OnGameModeInit
 			WStyle_OnGameModeInit();
 		#endif
-		print("[2.0.1] Walking styles loaded \n\
+		print("[2.0.2] Walking styles loaded \n\
 			Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard");
 		return 1;
 	}
@@ -40,25 +40,25 @@
 static const TIME_UPDATE_ANIMATION = 300;
 
 
-enum 
+enum e_WALKING_STYLES
 {
-	WALKING_STYLE_DEFAULT = 0,
-	WALKING_STYLE_NORMAL,
-	WALKING_STYLE_PED,
-	WALKING_STYLE_GANGSTA,
-	WALKING_STYLE_GANGSTA2,
-	WALKING_STYLE_OLD,
-	WALKING_STYLE_FAT_OLD,
-	WALKING_STYLE_FAT,
-	WALKING_STYLE_WOMANOLD,
-	WALKING_STYLE_WOMANFATOLD,
-	WALKING_STYLE_SHUFFLE,
-	WALKING_STYLE_LADY,
-	WALKING_STYLE_LADY2,
-	WALKING_STYLE_WHORE,
-	WALKING_STYLE_WHORE2,
-	WALKING_STYLE_DRUNK,
-	WALKING_STYLE_BLIND
+	E_WALKING_STYLE_DEFAULT = 0,
+	E_WALKING_STYLE_NORMAL,
+	E_WALKING_STYLE_PED,
+	E_WALKING_STYLE_GANGSTA,
+	E_WALKING_STYLE_GANGSTA2,
+	E_WALKING_STYLE_OLD,
+	E_WALKING_STYLE_FAT_OLD,
+	E_WALKING_STYLE_FAT,
+	E_WALKING_STYLE_WOMANOLD,
+	E_WALKING_STYLE_WOMANFATOLD,
+	E_WALKING_STYLE_SHUFFLE,
+	E_WALKING_STYLE_LADY,
+	E_WALKING_STYLE_LADY2,
+	E_WALKING_STYLE_WHORE,
+	E_WALKING_STYLE_WHORE2,
+	E_WALKING_STYLE_DRUNK,
+	E_WALKING_STYLE_BLIND
 };
 
 // --
@@ -66,8 +66,8 @@ enum
 // --
 
 static 
-	timer_Walking[MAX_PLAYERS], 
-	style_Walking[MAX_PLAYERS];
+	Walking_gsTimer[MAX_PLAYERS], 
+	e_WALKING_STYLES: Walking_gsStyle[MAX_PLAYERS];
 
 static const indexes_animations[] = {1231,1224,1226,1276,1278,1280,1228,1230,1458};
 //indexes animations for checking walking
@@ -101,8 +101,8 @@ public OnPlayerConnect(playerid)
 	#if defined WStyle_OnPlayerConnect
         WStyle_OnPlayerConnect(playerid);
     #endif
-	style_Walking[playerid] = WALKING_STYLE_DEFAULT;
-    timer_Walking[playerid] = -1;
+	Walking_gsStyle[playerid] = E_WALKING_STYLE_DEFAULT;
+    Walking_gsTimer[playerid] = -1;
 	return 1;
 }
 // --
@@ -111,9 +111,11 @@ public OnPlayerConnect(playerid)
 public OnPlayerDisconnect(playerid, reason) 
 {
 
-    if(timer_Walking[playerid] != -1)
-        KillTimer(timer_Walking[playerid]);
-	return 1;
+    if(Walking_gsTimer[playerid] != -1)
+    {
+        KillTimer(Walking_gsTimer[playerid]);
+    }
+    return 1;
 }
 
 public OnPlayerUpdate(playerid)
@@ -122,7 +124,7 @@ public OnPlayerUpdate(playerid)
 	#if defined WStyle_OnPlayerUpdate
         WStyle_OnPlayerUpdate(playerid);
     #endif
-    if(Player_GetWalkingStyle(playerid) > 0 && timer_Walking[playerid] == -1)
+    if(Player_GetWalkingStyle(playerid) > 0 && Walking_gsTimer[playerid] == -1)
     {
         new keys, updown, leftright;
         GetPlayerKeys(playerid,keys,updown,leftright);
@@ -133,7 +135,7 @@ public OnPlayerUpdate(playerid)
             {
                 if(temp_index_anim == indexes_animations[i])
                 {   
-                    ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.1,1,1,1,1,1);
+                    ApplyAnimation(playerid,"PED",NameAnimations[_:Walking_gsStyle[playerid]-1],4.1,1,1,1,1,1);
                     timer_WalkAnimation(playerid);
                     break;
                 }
@@ -152,9 +154,11 @@ public OnPlayerUpdate(playerid)
 forward timer_WalkAnimation(playerid);
 public timer_WalkAnimation(playerid)
 {
-    timer_Walking[playerid] = -1;
-    if(style_Walking[playerid] <= 0) 
-        return false;
+    Walking_gsTimer[playerid] = -1;
+    if(Walking_gsStyle[playerid] <= E_WALKING_STYLE_DEFAULT) 
+    {
+        return 0;
+    }
     new keys, updown, leftright;
     GetPlayerKeys(playerid,keys,updown,leftright);
     if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
@@ -164,45 +168,35 @@ public timer_WalkAnimation(playerid)
         {
             if(temp_index_anim == indexes_animations[i])
             {   
-                timer_Walking[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
-                return true;
+                Walking_gsTimer[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
+                return 1;
             }
         }
     }
-	return ApplyAnimation(playerid,"PED",NameAnimations[style_Walking[playerid]-1],4.0,0,0,0,0,1); 
+	return ApplyAnimation(playerid,"PED",NameAnimations[_:Walking_gsStyle[playerid]-1],4.0,0,0,0,0,1); 
 }
 
 // --
 // <summary> Sets player's walking style </summary>
 // --
-#pragma deprecated Use Player_SetWalkingStyle instead.
-stock SetPlayerWalkingStyle(const playerid, const style)
-{
-    return Player_SetWalkingStyle(playerid, style);
-}
 
-stock Player_SetWalkingStyle(const playerid, const style) 
+stock Player_SetWalkingStyle(playerid, e_WALKING_STYLES: style) 
 {
-    if(style >= sizeof(NameAnimations))
-        return false;
-	style_Walking[playerid] = style;
-    return true;
+    if(_:style >= sizeof(NameAnimations))
+    {
+        return 0;
+    }
+    Walking_gsStyle[playerid] = style;
+    return 1;
 }
 
 // --
 // <summary> Gets player's walking style </summary>
 // --
 
-
-#pragma deprecated Use Player_GetWalkingStyle instead.
-stock GetPlayerWalkingStyle(const playerid)
+stock Player_GetWalkingStyle(playerid) 
 {
-    return Player_GetWalkingStyle(playerid);
-}
-
-stock Player_GetWalkingStyle(const playerid) 
-{
-	return style_Walking[playerid];
+	return Walking_gsStyle[playerid];
 }
 
 // --

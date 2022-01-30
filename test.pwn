@@ -17,71 +17,71 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-				SetPlayerWalkingStyle (playerid, WALKING_STYLE_NORMAL);
+				Player_SetWalkingStyle(playerid, E_WALKING_STYLE_NORMAL);
 			}
 			if(listitem == 1)
 			{
-				SetPlayerWalkingStyle (playerid, WALKING_STYLE_PED);
+				Player_SetWalkingStyle(playerid, E_WALKING_STYLE_PED);
 			}
 			if(listitem == 2)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_GANGSTA);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_GANGSTA);
 			}
 			if(listitem == 3)
 			{
-				SetPlayerWalkingStyle (playerid, WALKING_STYLE_GANGSTA2);
+				Player_SetWalkingStyle(playerid, E_WALKING_STYLE_GANGSTA2);
 			}
 			if(listitem == 4)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_OLD);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_OLD);
 			}
 			if(listitem == 5)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_FAT_OLD);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_FAT_OLD);
 			}
 			if(listitem == 6)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_FAT);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_FAT);
 			}
 			if(listitem == 7)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_LADY);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_LADY);
 			}
 			if(listitem == 8)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_LADY2);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_LADY2);
 			}
 			if(listitem == 9)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_WHORE);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_WHORE);
 			}
 			if(listitem == 10)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_WHORE2);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_WHORE2);
 			}
 			if(listitem == 11)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_DRUNK);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_DRUNK);
 			}
 			if(listitem == 12)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_BLIND);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_BLIND);
 			}
 			if(listitem == 13)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_DEFAULT);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_DEFAULT);
 			}
             if(listitem == 14)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_SHUFFLE);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_SHUFFLE);
 			}
             if(listitem == 15)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_FAT_OLD);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_FAT_OLD);
 			}
             if(listitem == 16)
 			{
-			    SetPlayerWalkingStyle (playerid, WALKING_STYLE_FAT);
+			    Player_SetWalkingStyle(playerid, E_WALKING_STYLE_FAT);
 			}
             
         }
