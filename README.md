@@ -44,11 +44,10 @@ Include in your code and begin using the library:
 
 If you've had included this into your script/gamemode etc... Start by using a simple function  
 ```pawn
-Player_SetWalkingStyle(const playerid, const style);
+Player_SetWalkingStyle(const playerid, WALKING_STYLES:style);
 ```
 This is going to set you some of walking styles below 
 ```pawn
-enum {
 	WALKING_STYLE_DEFAULT = 0,
 	WALKING_STYLE_NORMAL,
 	WALKING_STYLE_PED,
@@ -66,15 +65,12 @@ enum {
 	WALKING_STYLE_WHORE2,
 	WALKING_STYLE_DRUNK,
 	WALKING_STYLE_BLIND
-};
 ```
 And there is 
 ```pawn
 Player_GetWalkingStyle(const playerid);
 ```
 This will return you the player's walking style.
-
-*Note*: If you've set the player's walking style, to activate it, firstly press _W_ then _left alt_ key.
 
 ## Testing
 
