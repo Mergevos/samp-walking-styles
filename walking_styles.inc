@@ -152,8 +152,8 @@ public OnPlayerUpdate(playerid)
     #endif
     if(Player_GetWalkingStyle(playerid) > WALKING_STYLE_DEFAULT && Walking_gsTimer[playerid] == -1)
     {
-        new KEY: keys, updown, leftright; 
-        GetPlayerKeys(playerid,keys,updown,leftright);
+        new KEY: keys, KEY: updown, KEY: leftright; 
+        GetPlayerKeys(playerid, keys, updown, leftright);
         if (((!!updown  || !!leftright) && (keys & KEY_WALK)))
         {
             new temp_index_anim = GetPlayerAnimationIndex(playerid);
@@ -183,7 +183,7 @@ public timer_WalkAnimation(playerid)
     {
         return false;
     }
-    new KEY: keys, updown, leftright;
+    new KEY: keys, KEY: updown, KEY: leftright;
     GetPlayerKeys(playerid,keys,updown,leftright);
     if (((!!updown  || !!leftright) && (keys & KEY_WALK) ))
     {
